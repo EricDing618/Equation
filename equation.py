@@ -1,7 +1,10 @@
+import string
+
 class BaseEasyEquation:
     def __init__(self):
-        self.degree=0
-        self.order=0
+        self.degree=0 #元数
+        self.order=0 #次幂数
+        self.operator=('+','-','*','/','=','>','<','^') #目前支持的运算符
         self.tool=BaseReturn()
     def give(self,e):
         self.eq:str=e
@@ -9,6 +12,8 @@ class BaseEasyEquation:
         return self.__class__.__name__
     def check_syntax(self):
         if len(self.tool.amount(self.eq)) != 2:
+            raise SyntaxError
+        elif self.tool.highest_power(self.eq) != self.order:
             raise SyntaxError
 class BaseReturn():
     def plus(self,e:str):
@@ -26,10 +31,12 @@ class BaseReturn():
         if len(cache) > 1:
             for i in range(1,len(cache)):
                 cache[i]=int(cache[i][0])
+            del cache[0]
             cache=max(cache)
             return cache
         else:
             return 1
+    def 
 
 class OneOne(BaseEasyEquation):
     def get(self,e:str):
