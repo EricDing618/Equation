@@ -10,11 +10,16 @@ class BaseEasyEquation:
         self.eq:str=e
     def type_(self):
         return self.__class__.__name__
-    def check_syntax(self):
-        if len(self.tool.amount(self.eq)) != 2:
-            raise SyntaxError
-        elif self.tool.highest_power(self.eq) != self.order:
-            raise SyntaxError
+    def syntax_error(self):
+        if (
+            len(self.tool.amount(self.eq)) != 2
+            or self.tool.highest_power(self.eq) != self.order
+            or len(self.tool.unknown(self.eq)) != self.degree
+            ):
+            return True
+        else:
+            return False
+        
 class BaseReturn():
     def plus(self,e:str):
         return e.split('+')
@@ -36,7 +41,12 @@ class BaseReturn():
             return cache
         else:
             return 1
-    def 
+    def unknown(self,e:str):
+        cache=set()
+        for i in range(len(e)):
+            if e[i] in string.ascii_letters:
+                cache.add(e[i])
+        return tuple(cache)
 
 class OneOne(BaseEasyEquation):
     def get(self,e:str):
