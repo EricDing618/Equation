@@ -1,22 +1,37 @@
-class BaseEquation:
+class BaseEasyEquation:
+    def __init__(self):
+        self.degree=0
+        self.order=0
+        self.tool=BaseReturn()
+    def give(self,e):
+        self.eq:str=e
     def type_(self):
         return self.__class__.__name__
-
+    def check_syntax(self):
+        if len(self.tool.amount(self.eq)) != 2:
+            raise SyntaxError
 class BaseReturn():
-    def plus(e:str):
+    def plus(self,e:str):
         return e.split('+')
-    def less(e:str):
+    def less(self,e:str):
         return e.split('-')
-    def times(e:str):
+    def times(self,e:str):
         return e.split('*')
-    def divide(e:str):
+    def divide(self,e:str):
         return e.split('/')
-    def check_syntax(e:str,class_:object):
-        match class_().type_():
-            case 'OneOne':
-                pass
+    def amount(self,e:str):
+        return e.split('=')
+    def highest_power(self,e:str)->int:
+        cache=e.split('^')
+        if len(cache) > 1:
+            for i in range(1,len(cache)):
+                cache[i]=int(cache[i][0])
+            cache=max(cache)
+            return cache
+        else:
+            return 1
 
-class OneOne(BaseEquation):
+class OneOne(BaseEasyEquation):
     def get(self,e:str):
         pass
 
