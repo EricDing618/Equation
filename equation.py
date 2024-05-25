@@ -1,10 +1,14 @@
 import string
 
-class BaseEasyEquation:
+class Base:
     def __init__(self):
+        self.operator=('+','-','*','/','=','>','<','^','.') #目前支持的运算符
+
+class BaseEasyEquation(Base):
+    def __init__(self):
+        super().__init__()
         self.degree=0 #元数
         self.order=0 #次幂数
-        self.operator=('+','-','*','/','=','>','<','^') #目前支持的运算符
         self.tool=BaseReturn()
     def give(self,e):
         self.eq:str=e
@@ -20,7 +24,9 @@ class BaseEasyEquation:
         else:
             return False
         
-class BaseReturn():
+class BaseReturn(Base):
+    def __init__(self):
+        super().__init__()
     def plus(self,e:str):
         return e.split('+')
     def less(self,e:str):
@@ -46,6 +52,12 @@ class BaseReturn():
         for i in range(len(e)):
             if e[i] in string.ascii_letters:
                 cache.add(e[i])
+        return tuple(cache)
+    def others(self,e:str):
+        cache=[]
+        for i in range(len(e)):
+            if e[i] not in string.ascii_letters+string.digits+''.join(self.operator):
+                cache.append(e[i])
         return tuple(cache)
 
 class OneOne(BaseEasyEquation):
