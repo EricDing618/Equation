@@ -9,6 +9,7 @@ class BaseEasyEquation(Base):
         super().__init__()
         self.degree=0 #元数
         self.order=0 #次幂数
+        self.result=0 #结果
         self.tool=BaseReturn()
     def give(self,e,ignore=()):
         self.eq:str=e
@@ -68,8 +69,11 @@ class OneOne(BaseEasyEquation):
         self.degree=1 #元数
         self.order=1 #次幂数
 
-    def get(self,e:str):
-        pass
+    def get(self):
+        if self.syntax_error(): #首先检查语法是否有误
+            raise SyntaxError("Invalid input data")
+        else:
+            self.result=self.tool.amount(self.eq)
 
 def demo():
     print(OneOne().type_())
@@ -81,12 +85,14 @@ def demo():
 
     a.give('ax+1=b')
     print(a.syntax_error())
+    a.get()
 
     a.give('ax+1=b',ignore=('a','b'))
     print(a.syntax_error())
 
     a.give('x+2=1')
     print(a.syntax_error())
+    a.get()
 
 if __name__=="__main__":
     demo()
