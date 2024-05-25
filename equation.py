@@ -2,7 +2,7 @@ import string
 
 class Base:
     def __init__(self):
-        self.operator=('+','-','*','/','=','>','<','^','.',' ') #目前支持的运算符
+        self.operator=('+','-','*','/','=','^','.',' ') #目前支持的运算符
 
 class BaseEasyEquation(Base):
     def __init__(self):
@@ -73,11 +73,18 @@ class OneOne(BaseEasyEquation):
 
 def demo():
     print(OneOne().type_())
+
     a=OneOne()
+
     a.give('ax+1')
     print(a.syntax_error())
+
+    a.give('ax+1=b')
+    print(a.syntax_error())
+
     a.give('ax+1=b',ignore=('a','b'))
     print(a.syntax_error())
+
     a.give('x+2=1')
     print(a.syntax_error())
 
