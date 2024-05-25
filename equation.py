@@ -71,12 +71,12 @@ class OneOne(BaseEasyEquation):
 
     def get(self):
         if self.syntax_error(): #首先检查语法是否有误
-            raise SyntaxError("Invalid input data")
+            raise SyntaxError("Invalid input data.")
         else:
             self.result=self.tool.amount(self.eq)
 
 def demo():
-    print(OneOne().type_())
+    #print(OneOne().type_())
 
     a=OneOne()
 
