@@ -74,25 +74,3 @@ class OneOne(BaseEasyEquation):
             raise SyntaxError("Invalid input data.")
         else:
             self.result=self.tool.amount(self.eq)
-
-def demo():
-    #print(OneOne().type_())
-
-    a=OneOne()
-
-    a.give('ax+1')
-    print(a.syntax_error())
-
-    a.give('ax+1=b')
-    print(a.syntax_error())
-    a.get()
-
-    a.give('ax+1=b',ignore=('a','b'))
-    print(a.syntax_error())
-
-    a.give('x+2=1')
-    print(a.syntax_error())
-    a.get()
-
-if __name__=="__main__":
-    demo()
