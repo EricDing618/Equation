@@ -21,6 +21,7 @@ class BaseEasyEquation(Base):
             or self.tool.highest_power(self.eq) != self.order
             or len(self.tool.unknown(self.eq,self.ignore)) != self.degree
             or len(self.tool.others(self.eq)) > 0
+            or self.tool.parenthesis_error(self.eq)
             ):
             return True
         else:
@@ -61,5 +62,12 @@ class BaseReturn(Base):
             if e[i] not in string.ascii_letters+string.digits+''.join(self.operator):
                 cache.append(e[i])
         return tuple(cache)
-    def parenthesis_check(self,e:str):
-        
+    def parenthesis_error(self,e:str):
+        if (
+            len(re.findall('\(+',e))==len(re.findall('\)+',e))
+            and len(re.findall('\[+',e))==len(re.findall('\]+',e))
+            and len(re.findall('\{+',e))==len(re.findall('\}+',e))
+        ):
+            return False
+        else:
+            return True
