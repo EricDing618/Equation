@@ -16,6 +16,7 @@ class BaseEasyEquation(Base):
     def type_(self):
         return self.__class__.__name__
     def syntax_error(self):
+        #print(self.tool.sm_parenthesis('3[a+1]*b'))
         if (
             len(self.tool.amount(self.eq)) != 2 #等号错误
             or self.tool.highest_power(self.eq) != self.order #次幂不符
@@ -40,6 +41,30 @@ class BaseReturn(Base):
         return e.split('/')
     def amount(self,e:str):
         return e.split('=')
+    def big_parenthesis(self,e:str):
+        c1=e.split('{')
+        c2=[]
+        for i in range(len(c1)):
+            c3=c1[i].split("}")
+            for j in range(len(c3)):
+                c2.append(c3[j])
+        return c2
+    def mid_parenthesis(self,e:str):
+        c1=e.split('[')
+        c2=[]
+        for i in range(len(c1)):
+            c3=c1[i].split("]")
+            for j in range(len(c3)):
+                c2.append(c3[j])
+        return c2
+    def sm_parenthesis(self,e:str):
+        c1=e.split('(')
+        c2=[]
+        for i in range(len(c1)):
+            c3=c1[i].split(")")
+            for j in range(len(c3)):
+                c2.append(c3[j])
+        return c2
     def highest_power(self,e:str)->int:
         cache=e.split('^')
         if len(cache) > 1:
