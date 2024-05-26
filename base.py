@@ -17,11 +17,11 @@ class BaseEasyEquation(Base):
         return self.__class__.__name__
     def syntax_error(self):
         if (
-            len(self.tool.amount(self.eq)) != 2
-            or self.tool.highest_power(self.eq) != self.order
-            or len(self.tool.unknown(self.eq,self.ignore)) != self.degree
-            or len(self.tool.others(self.eq)) > 0
-            or self.tool.parenthesis_error(self.eq)
+            len(self.tool.amount(self.eq)) != 2 #等号错误
+            or self.tool.highest_power(self.eq) != self.order #次幂不符
+            or len(self.tool.unknown(self.eq,self.ignore)) != self.degree #未知数数量不符
+            or len(self.tool.others(self.eq)) > 0 #含有与方程无关的字符
+            or self.tool.parenthesis_error(self.eq) #括号个数不对称
             ):
             return True
         else:
