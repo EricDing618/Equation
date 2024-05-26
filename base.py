@@ -43,7 +43,7 @@ class BaseReturn(Base):
         return e.split('=')
     def big_parenthesis(self,e:str):
         c1=e.split('{')
-        c2=[]
+        c2:list=[]
         for i in range(len(c1)):
             c3=c1[i].split("}")
             for j in range(len(c3)):
@@ -51,7 +51,7 @@ class BaseReturn(Base):
         return c2
     def mid_parenthesis(self,e:str):
         c1=e.split('[')
-        c2=[]
+        c2:list=[]
         for i in range(len(c1)):
             c3=c1[i].split("]")
             for j in range(len(c3)):
@@ -59,7 +59,7 @@ class BaseReturn(Base):
         return c2
     def sm_parenthesis(self,e:str):
         c1=e.split('(')
-        c2=[]
+        c2:list=[]
         for i in range(len(c1)):
             c3=c1[i].split(")")
             for j in range(len(c3)):
@@ -76,13 +76,29 @@ class BaseReturn(Base):
         else:
             return 1
     def unknown(self,e:str,ignore:tuple):
-        cache=set()
+        cache:set={}
+        num:list=[]
+        last_num_index:int=0
         for i in range(len(e)):
             if e[i] in string.ascii_letters and e[i] not in ignore:
-                cache.add(e[i])
+                if i==0:
+                    cache.add(e[i])
+                else:
+                    if e[i-1] in string.digits
+            elif (
+                e[i] in string.digits
+                and 0<=i-1
+                and len(e)>=i+1
+                ):
+                if e[i-1] not in string.digits: #上一个字符不是数字
+                    num.append(e[i])
+                else:
+                    if e[i+1] not in 
+                    num[-1]+=e[i]
+
         return tuple(cache)
     def others(self,e:str):
-        cache=[]
+        cache:list
         for i in range(len(e)):
             if e[i] not in string.ascii_letters+string.digits+''.join(self.operator):
                 cache.append(e[i])

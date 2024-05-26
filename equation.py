@@ -12,3 +12,5 @@ class OneOne(BaseEasyEquation):
             raise SyntaxError("Invalid input data.")
         else:
             self.result=self.tool.amount(self.eq)
+    
+    
