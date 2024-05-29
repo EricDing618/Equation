@@ -4,15 +4,17 @@ import string
 class Simplify:
     def __init__(self):
         self.tool=BaseReturn()
-    def easy_eq(self,left:str,right:str): #指像x+2=3这样的方程
-        if 
+    def sim_left(self,el):
+        if len(el)==1: #没有大括号项
+            el=''.join(el)
+            el=self.tool.mid_parenthesis(el)
+            if len(el)==1: #没有中括号项
+                el=''.join(el)
+                el=self.tool.sm_parenthesis(el)
+                if len(el)==1: #没有小括号项
+                    el=self.tool.plus(el)
+                    
     def equation(self,left:str,right:str):
-        cl=left;cr=right #左边项与右边项
-        cl=self.tool.big_parenthesis(cl)
-        if len(cl)==1: #没有大括号项
-            cl=''.join(cl)
-            cl=self.tool.mid_parenthesis(cl)
-            if len(cl)==1: #没有中括号项
-                cl=''.join(cl)
-                cl=self.tool.sm_parenthesis(cl)
-                if len(cl)==1: #没有小括号项
+        el=left;er=right #左边项与右边项
+        el=self.tool.big_parenthesis(el)
+    

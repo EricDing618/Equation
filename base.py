@@ -76,26 +76,10 @@ class BaseReturn(Base):
         else:
             return 1
     def unknown(self,e:str,ignore:tuple):
-        cache:set={}
-        num:list=[]
-        last_num_index:int=0
+        cache=set()
         for i in range(len(e)):
             if e[i] in string.ascii_letters and e[i] not in ignore:
-                if i==0:
-                    cache.add(e[i])
-                else:
-                    if e[i-1] in string.digits
-            elif (
-                e[i] in string.digits
-                and 0<=i-1
-                and len(e)>=i+1
-                ):
-                if e[i-1] not in string.digits: #上一个字符不是数字
-                    num.append(e[i])
-                else:
-                    if e[i+1] not in 
-                    num[-1]+=e[i]
-
+                cache.add(e[i])
         return tuple(cache)
     def others(self,e:str):
         cache:list
