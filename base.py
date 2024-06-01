@@ -97,8 +97,8 @@ class BaseReturn(Base):
                 for i3 in self.times(i2):
                     for i4 in self.divide(i3):
                         for i5 in range(len(i4)-1):
-                            if (i4[i5] in string.digits+string.ascii_letters+self.parenthesis) and (i4[i5+1] in string.ascii_letters+string.ascii_letters+self.parenthesis):
-                                
+                            if (i4[i5] in string.digits+string.ascii_letters+self.parenthesis) and (i4[i5+1] in string.ascii_letters+string.ascii_letters+self.parenthesis) and not(i4[i5] in string.digits and i4[i5+1] in string.digits):
+
     def others(self,e:str):
         cache:list=[]
         for i in range(len(e)):
