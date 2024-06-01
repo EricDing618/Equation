@@ -1,7 +1,8 @@
 import string,re
 class Base:
     def __init__(self):
-        self.operator=('+','-','*','/','=','^','.',' ') #目前支持的运算符
+        self.operator = ('+','-','*','/','=','^','.',' ') #目前支持的运算符
+        self.parenthesis = '()[]{}' #括号
 
 class BaseEasyEquation(Base):
     def __init__(self):
@@ -10,9 +11,16 @@ class BaseEasyEquation(Base):
         self.order=0 #次幂数
         self.result=0 #结果
         self.tool=BaseReturn()
-    def give(self,e,ignore=()):
-        self.eq:str=e
-        self.ignore:tuple=ignore
+    def give(self,e:str,ignore=(),value=()):
+        self.eq = e
+        if len(ignore) != len(value):
+            raise ValueError("len(ignore) != len(value).")
+        elif ignore and value:
+            self.ignore:tuple=ignore
+            self.ignore_value:tuple=value
+            for v in range(len(self.ignore_value)):
+                
+
     def type_(self):
         return self.__class__.__name__
     def syntax_error(self):
@@ -81,8 +89,18 @@ class BaseReturn(Base):
             if e[i] in string.ascii_letters and e[i] not in ignore:
                 cache.add(e[i])
         return tuple(cache)
+    def collect(self,e:str):
+        _return=[]
+        c1=''.join(e.split(' ')) #过滤空格
+        for i1 in self.plus(c1):
+            for i2 in self.less(i1):
+                for i3 in self.times(i2):
+                    for i4 in self.divide(i3):
+                        for i5 in range(len(i4)-1):
+                            if (i4[i5] in string.digits+string.ascii_letters+self.parenthesis) and (i4[i5+1] in string.ascii_letters+string.ascii_letters+self.parenthesis):
+                                
     def others(self,e:str):
-        cache:list
+        cache:list=[]
         for i in range(len(e)):
             if e[i] not in string.ascii_letters+string.digits+''.join(self.operator):
                 cache.append(e[i])
