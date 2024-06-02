@@ -18,7 +18,7 @@ class BaseEasyEquation(Base):
         elif ignore and value:
             self.ignore:tuple=ignore
             self.ignore_value:tuple=value
-            for v in range(len(self.ignore_value)):
+            for vi in range(len(self.ignore_value)):
                 
 
     def type_(self):
@@ -89,6 +89,8 @@ class BaseReturn(Base):
             if e[i] in string.ascii_letters and e[i] not in ignore:
                 cache.add(e[i])
         return tuple(cache)
+    def insert(self,e:str,index:int,_insert:str):
+        return e[:index]+_insert+e[index:]
     def collect(self,e:str):
         _return=[]
         c1=''.join(e.split(' ')) #过滤空格
@@ -97,8 +99,9 @@ class BaseReturn(Base):
                 for i3 in self.times(i2):
                     for i4 in self.divide(i3):
                         for i5 in range(len(i4)-1):
+                            _a=[]
                             if (i4[i5] in string.digits+string.ascii_letters+self.parenthesis) and (i4[i5+1] in string.ascii_letters+string.ascii_letters+self.parenthesis) and not(i4[i5] in string.digits and i4[i5+1] in string.digits):
-
+                                _a.append()
     def others(self,e:str):
         cache:list=[]
         for i in range(len(e)):
