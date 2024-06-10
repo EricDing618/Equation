@@ -1,4 +1,5 @@
 import string,re
+
 class Base:
     def __init__(self):
         self.operator = ('+','-','*','/','=','^','.',' ') #目前支持的运算符
@@ -13,13 +14,10 @@ class BaseEasyEquation(Base):
         self.tool=BaseReturn()
     def give(self,e:str,ignore=(),value=()):
         self.eq = e
-        if len(ignore) != len(value):
+        self.ignore=ignore
+        self.value=value
+        if len(self.ignore) != len(self.value):
             raise ValueError("len(ignore) != len(value).")
-        elif ignore and value:
-            self.ignore:tuple=ignore
-            self.ignore_value:tuple=value
-            for vi in range(len(self.ignore_value)):
-                
 
     def type_(self):
         return self.__class__.__name__
@@ -37,6 +35,7 @@ class BaseEasyEquation(Base):
             return False
         
 class BaseReturn(Base):
+    '''e: str= Equation String'''
     def __init__(self):
         super().__init__()
     def plus(self,e:str):
@@ -73,6 +72,20 @@ class BaseReturn(Base):
             for j in range(len(c3)):
                 c2.append(c3[j])
         return c2
+    def include_parenthesis(self,e:str,type_:int):
+        '''type_: int
+        = 0: Big parenthesis
+        = 1: Middle parenthesis
+        = 2: Small parenthesis'''
+        match type_:
+            case 0:
+                return '{' in e and '}' in e
+            case 1:
+                return '[' in e and ']' in e
+            case 2:
+                return '(' in e and ')' in e
+            case _:
+                raise SyntaxError
     def highest_power(self,e:str)->int:
         cache=e.split('^')
         if len(cache) > 1:
@@ -91,17 +104,7 @@ class BaseReturn(Base):
         return tuple(cache)
     def insert(self,e:str,index:int,_insert:str):
         return e[:index]+_insert+e[index:]
-    def collect(self,e:str):
-        _return=[]
-        c1=''.join(e.split(' ')) #过滤空格
-        for i1 in self.plus(c1):
-            for i2 in self.less(i1):
-                for i3 in self.times(i2):
-                    for i4 in self.divide(i3):
-                        for i5 in range(len(i4)-1):
-                            _a=[]
-                            if (i4[i5] in string.digits+string.ascii_letters+self.parenthesis) and (i4[i5+1] in string.ascii_letters+string.ascii_letters+self.parenthesis) and not(i4[i5] in string.digits and i4[i5+1] in string.digits):
-                                _a.append()
+    
     def others(self,e:str):
         cache:list=[]
         for i in range(len(e)):
