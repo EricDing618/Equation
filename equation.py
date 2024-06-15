@@ -11,6 +11,8 @@ class OneOne(BaseEasyEquation):
         if self.syntax_error(): #首先检查语法是否有误
             raise SyntaxError("Invalid input data.")
         else:
-            self.result=self.tool.amount(self.eq)
-    
+            no_parenthesis=[]
+            if self.tool.include_parenthesis(self.eq,0):
+                
+
     
