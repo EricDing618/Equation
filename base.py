@@ -103,14 +103,14 @@ class BaseReturn():
                 cache.add(e[i])
         return tuple(cache)
     def initEq(self,e:str):
+        '''方程标准化'''
         cache=e
-        for i in range(len(cache)-1):
-            if (cache[i] in LETTERS+PARENTHESIS+NUMBERS
-                or cache[i+1] in LETTERS+PARENTHESIS+NUMBERS) and not (
-                    cache[i] in NUMBERS and cache[i+1] in NUMBERS
-                ):
-                cache = cache[:i+1]+'*'+cache[i+1:]
-        return cache
+        cache=cache.replace('+-','-')
+        cache=cache.replace('--','+')
+        cache=cache.replace('++','+') 
+        cache=cache.replace('+-','-')
+        cache=cache.replace('-+','-')
+
     
     def others(self,e:str):
         cache:list=[]

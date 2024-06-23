@@ -13,6 +13,6 @@ class OneOne(BaseEasyEquation):
         else:
             no_parenthesis=[]
             if self.tool.include_parenthesis(self.eq,0):
-                
+                pass
 
     

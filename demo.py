@@ -24,7 +24,7 @@ def demo():
 
 def test():
     a=BaseReturn()
-    print(a.initEq(''))
+    print(a.initEq('23abcd56'))
 
 if __name__=='__main__':
     test()
