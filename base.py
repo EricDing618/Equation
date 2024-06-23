@@ -102,13 +102,15 @@ class BaseReturn():
             if e[i] in LETTERS and e[i] not in ignore:
                 cache.add(e[i])
         return tuple(cache)
-    def insert(self,e:str,index:int,_insert:str):
-        return e[:index]+_insert+e[index:]
+    def initEq(self,e:str):
+        cache=e
+        for i in range(len(cache)-1):
+            if (cache[i])
     
     def others(self,e:str):
         cache:list=[]
         for i in range(len(e)):
-            if e[i] not in LETTERS+NUMBERS+''.join(self.operator):
+            if e[i] not in ALL:
                 cache.append(e[i])
         return tuple(cache)
     def parenthesis_error(self,e:str):
