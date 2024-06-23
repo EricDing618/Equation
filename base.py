@@ -104,12 +104,36 @@ class BaseReturn():
         return tuple(cache)
     def initEq(self,e:str):
         '''方程标准化'''
-        cache=e
-        cache=cache.replace('+-','-')
-        cache=cache.replace('--','+')
-        cache=cache.replace('++','+') 
-        cache=cache.replace('+-','-')
-        cache=cache.replace('-+','-')
+        c1=e
+        c2=[]
+        # 去除多余空格
+        c1=c1.replace(' ','')
+        # 去除多余符号
+        c1=c1.replace('+-','-')
+        c1=c1.replace('--','+')
+        c1=c1.replace('++','+') 
+        c1=c1.replace('+-','-')
+        c1=c1.replace('-+','-')
+        c1=c1.replace(')(',')*(')
+        c1=c1.replace('][',']*[')
+        c1=c1.replace('}{','}*{')
+        #添加乘号
+        for i in range(len(c1)-1):
+            front=c1[i];back=c1[i+1]
+            if (
+                (front in LETTERS and back in LETTERS)
+                or (front in LETTERS and back in NUMBERS)
+                or (front in NUMBERS and back in LETTERS)
+                or (front in NUMBERS and back in LEFTPARENTHESIS)
+                or (front in RIGHTPARENTHESIS and back in NUMBERS)
+                ):
+                c2.append(front+'*'+back)
+            else:
+                c2.append(front+back)
+        for i in range(len(c2)):
+            if i != 0:
+                c2[i]=c2[i][1:]
+        return ''.join(c2)
 
     
     def others(self,e:str):
