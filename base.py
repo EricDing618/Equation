@@ -24,7 +24,7 @@ class BaseEasyEquation(Base):
         if len(self.ignore) != len(self.value): #忽略数与忽略数的值个数不相等
             raise ValueError("len(ignore) != len(value).")
         else:
-            self.eq.replace('**','^') #防止误判
+            self.eq.replace('**','^') #防止误判为乘号，使用exec()时应转回
             self.eq=self.tool.initEq(self.eq)
             self.eq=self.tool.replace_unknown(self.eq,self.ignore,self.value)
             if self.syntax_error():
@@ -41,6 +41,7 @@ class BaseEasyEquation(Base):
             or len(self.tool.unknown(self.eq,self.ignore)) != self.degree #未知数数量不符
             or len(self.tool.others(self.eq)) > 0 #含有与方程无关的字符
             or self.tool.parenthesis_error(self.eq) #括号个数不对称
+            or self.tool.SymbolIsConnect(self.eq) #符号相连
             ):
             return True
         else:
@@ -115,6 +116,12 @@ class BaseReturn():
             if e[i] in LETTERS and e[i] not in ignore:
                 cache.add(e[i])
         return tuple(cache)
+    def SymbolIsConnect(self,e:str):
+        for i in range(len(e)-1):
+            if e[i] in OPERATOR and e[i+1] in OPERATOR:
+                break
+        return True
+            
     def initEq(self,e:str):
         '''方程标准化'''
         c1=e
