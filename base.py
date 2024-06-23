@@ -15,8 +15,9 @@ class BaseEasyEquation(Base):
         self.ignore=() #忽略的未知数
         self.value=() #忽略数的值
     def make(self):
-        print('return results...')
-    def give(self,e:str,ignore=(),value=()):
+        print(f'equation: {self.eq}')
+        print(f'result: {self.result}')
+    def give(self,e:str,ignore:tuple=(),value:tuple=()):
         self.eq = e
         self.ignore=ignore
         self.value=value
@@ -24,6 +25,7 @@ class BaseEasyEquation(Base):
             raise ValueError("len(ignore) != len(value).")
         else:
             self.eq=self.tool.initEq(self.eq)
+            self.eq=self.tool.replace_unknown(self.eq,self.ignore,self.value)
             self.make() #给出结果
     def type_(self):
         return self.__class__.__name__
@@ -39,7 +41,8 @@ class BaseEasyEquation(Base):
             return True
         else:
             return False
-        
+    def get(self):
+        return self.result   
 class BaseReturn():
     '''e: str= Equation String'''
     def __init__(self):
@@ -140,8 +143,11 @@ class BaseReturn():
             if i != 0:
                 c2[i]=c2[i][1:]
         return ''.join(c2)
-
-    
+    def replace_unknown(self,e:str,ignore:tuple,value:tuple):
+        cache=e
+        for ign,val in zip(ignore,value):
+            cache=cache.replace(ign,str(val))
+        return cache
     def others(self,e:str):
         cache:list=[]
         for i in range(len(e)):
