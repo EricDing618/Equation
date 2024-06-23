@@ -137,7 +137,7 @@ class BaseReturn():
         c1=c1.replace(')(',')*(')
         c1=c1.replace('][',']*[')
         c1=c1.replace('}{','}*{')
-        self.eq.replace('**','^') #防止误判为乘号，使用exec()时应转回
+        c1=c1.replace('**','^') #防止误判为乘号，使用exec()时应转回
         #添加乘号
         for i in range(len(c1)-1):
             front=c1[i];back=c1[i+1]
