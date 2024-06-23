@@ -118,7 +118,7 @@ class BaseReturn():
         return tuple(cache)
     def SymbolIsConnect(self,e:str):
         for i in range(len(e)-1):
-            if e[i] in OPERATOR and e[i+1] in OPERATOR:
+            if (e[i] in OPERATOR and e[i+1] in OPERATOR) or (e[i] in LEFTPARENTHESIS and e[i+1] in RIGHTPARENTHESIS):
                 break
         return True
             
@@ -134,9 +134,9 @@ class BaseReturn():
         c1=c1.replace('++','+') 
         c1=c1.replace('+-','-')
         c1=c1.replace('-+','-')
-        c1=c1.replace(')(',')*(')
-        c1=c1.replace('][',']*[')
-        c1=c1.replace('}{','}*{')
+        for r in RIGHTPARENTHESIS:
+            for l in LEFTPARENTHESIS:
+                c1=c1.replace(r+l,r+'*'+l)
         c1=c1.replace('**','^') #防止误判为乘号，使用exec()时应转回
         #添加乘号
         for i in range(len(c1)-1):
