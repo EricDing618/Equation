@@ -10,15 +10,21 @@ class BaseEasyEquation(Base):
         super().__init__()
         self.degree=0 #元数
         self.order=0 #次幂数
-        self.result=0 #结果
-
+        self.result=0 #结果（一元：int，多元：dict）
+        self.eq='' #方程
+        self.ignore=() #忽略的未知数
+        self.value=() #忽略数的值
+    def make(self):
+        print('return results...')
     def give(self,e:str,ignore=(),value=()):
         self.eq = e
         self.ignore=ignore
         self.value=value
         if len(self.ignore) != len(self.value):
             raise ValueError("len(ignore) != len(value).")
-
+        else:
+            self.eq=self.tool.initEq(self.eq)
+            self.make() #给出结果
     def type_(self):
         return self.__class__.__name__
     def syntax_error(self):
