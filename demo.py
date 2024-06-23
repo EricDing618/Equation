@@ -24,7 +24,7 @@ def demo():
 
 def test():
     a=BaseReturn()
-    print(a.initEq('35 (ab+3) (ab+-3)'))
+    print(a.a.initEq('35 (ab+3) (ab+-3)'))
 
 if __name__=='__main__':
     test()

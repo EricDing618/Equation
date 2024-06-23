@@ -21,12 +21,16 @@ class BaseEasyEquation(Base):
         self.eq = e
         self.ignore=ignore
         self.value=value
-        if len(self.ignore) != len(self.value):
+        if len(self.ignore) != len(self.value): #忽略数与忽略数的值个数不相等
             raise ValueError("len(ignore) != len(value).")
         else:
+            self.eq.replace('**','^') #防止误判
             self.eq=self.tool.initEq(self.eq)
             self.eq=self.tool.replace_unknown(self.eq,self.ignore,self.value)
-            self.make() #给出结果
+            if self.syntax_error():
+                raise SyntaxError("Invalid input data.")
+            else:
+                self.make() #给出结果
     def type_(self):
         return self.__class__.__name__
     def syntax_error(self):
