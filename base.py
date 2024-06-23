@@ -1,9 +1,9 @@
-import string,re
+import re
+from config import *
 
 class Base:
     def __init__(self):
-        self.operator = ('+','-','*','/','=','^','.',' ') #目前支持的运算符
-        self.parenthesis = '()[]{}' #括号
+        self.tool=BaseReturn()
 
 class BaseEasyEquation(Base):
     def __init__(self):
@@ -11,7 +11,7 @@ class BaseEasyEquation(Base):
         self.degree=0 #元数
         self.order=0 #次幂数
         self.result=0 #结果
-        self.tool=BaseReturn()
+
     def give(self,e:str,ignore=(),value=()):
         self.eq = e
         self.ignore=ignore
@@ -34,7 +34,7 @@ class BaseEasyEquation(Base):
         else:
             return False
         
-class BaseReturn(Base):
+class BaseReturn():
     '''e: str= Equation String'''
     def __init__(self):
         super().__init__()
@@ -99,7 +99,7 @@ class BaseReturn(Base):
     def unknown(self,e:str,ignore:tuple):
         cache=set()
         for i in range(len(e)):
-            if e[i] in string.ascii_letters and e[i] not in ignore:
+            if e[i] in LETTERS and e[i] not in ignore:
                 cache.add(e[i])
         return tuple(cache)
     def insert(self,e:str,index:int,_insert:str):
@@ -108,7 +108,7 @@ class BaseReturn(Base):
     def others(self,e:str):
         cache:list=[]
         for i in range(len(e)):
-            if e[i] not in string.ascii_letters+string.digits+''.join(self.operator):
+            if e[i] not in LETTERS+NUMBERS+''.join(self.operator):
                 cache.append(e[i])
         return tuple(cache)
     def parenthesis_error(self,e:str):
