@@ -139,22 +139,6 @@ class BaseReturn():
         while ('+-' in c1) or ('-+' in c1) or ('++' in c1) or ('--' in c1):
             c1 = c1.replace('+-', '-').replace('-+', '-').replace('++', '+').replace('--', '+')
         return c1
-
-    def _old_plus_less(self,e:str):
-        '''将加法和减法混合的符号化简'''
-        c1=e
-        c2=True
-        c3=0
-        while c2:
-            c1 = c1.replace('+-', '-').replace('-+', '-').replace('++', '+').replace('--', '+')
-            for i in ('++','--','+-','-+'):
-                if i not in c1:
-                    c3+=1
-                else:
-                    c3-=1
-            if c3>=4: #保险起见，设置范围
-                c2=False
-                return c1
         
     def stdEq(self,e:str):
         '''方程标准化'''
@@ -209,3 +193,21 @@ class BaseReturn():
             return False
         else:
             return True
+        
+
+    #被废弃的方法 
+    def _old_plus_less(self,e:str):
+        '''将加法和减法混合的符号化简'''
+        c1=e
+        c2=True
+        c3=0
+        while c2:
+            c1 = c1.replace('+-', '-').replace('-+', '-').replace('++', '+').replace('--', '+')
+            for i in ('++','--','+-','-+'):
+                if i not in c1:
+                    c3+=1
+                else:
+                    c3-=1
+            if c3>=4: #保险起见，设置范围
+                c2=False
+                return c1
