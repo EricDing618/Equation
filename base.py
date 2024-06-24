@@ -203,7 +203,7 @@ class BaseReturn():
         
 
     #被废弃的方法 
-    def _old_plus_less(self,e:str):
+    def _old__plus_less(self,e:str):
         '''将加法和减法混合的符号化简'''
         c1=e
         c2=True
