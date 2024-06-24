@@ -134,35 +134,23 @@ class BaseReturn():
                 break
         return return_
     
-    def plus_less(self,e:str)->str:
+    def plus_less(self,e:str):
         '''将加法和减法混合的符号化简'''
         c1=e
-        c2=[]
-        for i in range(len(c1)-1):
-            front=c1[i];back=c1[i+1]
-            if front=='+':
-                if back=='-':
-                    c2.append('-')
-                elif back=='+':
-                    c2.append('+')
-                else:
-                    c2.append(front)
-            elif front=='-':
-                if back=='+':
-                    c2.append('-')
-                elif back=='-':
-                    c2.append('+')
-                else:
-                    c2.append(front)
-            else:
-                c2.append(front)
-        c2=''.join(c2)
-        for i in ('++','+-','-+','--'):
-            if i in c2:
-                c2=self.plus_less(c2)
-            else:
-                return c2
-
+        c2=True
+        c3=0
+        while c2:
+            c1=c1.replace('+-','-')
+            c1=c1.replace('-+','-')
+            c1=c1.replace('++','+')
+            c1=c1.replace('--','+')
+            for i in ('++','--','+-','-+'):
+                if i not in c1:
+                    c3+=1
+            if c3>=4:
+                c2=False
+                return c1
+        
     def stdEq(self,e:str):
         '''方程标准化'''
         c1=e
@@ -193,7 +181,7 @@ class BaseReturn():
             if i != 0:
                 c2[i]=c2[i][1:]
         return ''.join(c2)
-    
+
     def replace_unknown(self,e:str,ignore:tuple,value:tuple):
         cache=e
         for ign,val in zip(ignore,value):
