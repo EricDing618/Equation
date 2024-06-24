@@ -146,10 +146,7 @@ class BaseReturn():
         c2=True
         c3=0
         while c2:
-            c1=c1.replace('+-','-')
-            c1=c1.replace('-+','-')
-            c1=c1.replace('++','+')
-            c1=c1.replace('--','+')
+            c1 = c1.replace('+-', '-').replace('-+', '-').replace('++', '+').replace('--', '+')
             for i in ('++','--','+-','-+'):
                 if i not in c1:
                     c3+=1
