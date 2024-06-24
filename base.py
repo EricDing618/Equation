@@ -59,10 +59,13 @@ class BaseReturn():
         return e.split('-')
     def times(self,e:str):
         return e.split('*')
+    
     def divide(self,e:str):
         return e.split('/')
+    
     def amount(self,e:str):
         return e.split('=')
+    
     def big_parenthesis(self,e:str):
         c1=e.split('{')
         c2:list=[]
@@ -71,6 +74,7 @@ class BaseReturn():
             for j in range(len(c3)):
                 c2.append(c3[j])
         return c2
+    
     def mid_parenthesis(self,e:str):
         c1=e.split('[')
         c2:list=[]
@@ -79,6 +83,7 @@ class BaseReturn():
             for j in range(len(c3)):
                 c2.append(c3[j])
         return c2
+    
     def sm_parenthesis(self,e:str):
         c1=e.split('(')
         c2:list=[]
@@ -87,6 +92,7 @@ class BaseReturn():
             for j in range(len(c3)):
                 c2.append(c3[j])
         return c2
+    
     def include_parenthesis(self,e:str,type_:int):
         '''type_: int
         = 0: Big parenthesis
@@ -101,6 +107,7 @@ class BaseReturn():
                 return '(' in e and ')' in e
             case _:
                 raise SyntaxError
+            
     def highest_power(self,e:str)->int:
         cache=e.split('^')
         if len(cache) > 1:
@@ -111,18 +118,21 @@ class BaseReturn():
             return cache
         else:
             return 1
+        
     def unknown(self,e:str,ignore:tuple):
         cache=set()
         for i in range(len(e)):
             if e[i] in LETTERS and e[i] not in ignore:
                 cache.add(e[i])
         return tuple(cache)
-    def no
+    
     def SymbolIsConnect(self,e:str):
+        return_=False
         for i in range(len(e)-1):
             if (e[i] in OPERATOR and e[i+1] in OPERATOR) or (e[i] in LEFTPARENTHESIS and e[i+1] in RIGHTPARENTHESIS):
+                return_=True
                 break
-        return True
+        return return_
             
     def initEq(self,e:str):
         '''方程标准化'''
@@ -157,17 +167,20 @@ class BaseReturn():
             if i != 0:
                 c2[i]=c2[i][1:]
         return ''.join(c2)
+    
     def replace_unknown(self,e:str,ignore:tuple,value:tuple):
         cache=e
         for ign,val in zip(ignore,value):
             cache=cache.replace(ign,str(val))
         return cache
+    
     def others(self,e:str):
         cache:list=[]
         for i in range(len(e)):
             if e[i] not in ALL:
                 cache.append(e[i])
         return tuple(cache)
+    
     def parenthesis_error(self,e:str):
         if (
             len(re.findall('\(+',e))==len(re.findall('\)+',e))
