@@ -133,8 +133,14 @@ class BaseReturn():
                 return_=True
                 break
         return return_
-    
-    def plus_less(self,e:str):
+    def plus_less(self, e: str):
+        '''将加法和减法混合的符号化简'''
+        c1 = e
+        while ('+-' in c1) or ('-+' in c1) or ('++' in c1) or ('--' in c1):
+            c1 = c1.replace('+-', '-').replace('-+', '-').replace('++', '+').replace('--', '+')
+        return c1
+
+    def _old_plus_less(self,e:str):
         '''将加法和减法混合的符号化简'''
         c1=e
         c2=True
