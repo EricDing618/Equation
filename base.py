@@ -147,6 +147,8 @@ class BaseReturn():
             for i in ('++','--','+-','-+'):
                 if i not in c1:
                     c3+=1
+                else:
+                    c3-=1
             if c3>=4:
                 c2=False
                 return c1
