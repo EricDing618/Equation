@@ -149,7 +149,7 @@ class BaseReturn():
                     c3+=1
                 else:
                     c3-=1
-            if c3>=4:
+            if c3>=4: #保险起见，设置范围
                 c2=False
                 return c1
         
