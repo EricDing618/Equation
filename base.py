@@ -1,5 +1,6 @@
 import re
 from config import *
+from typing import Union
 
 class Base:
     def __init__(self):
@@ -10,7 +11,7 @@ class BaseEasyEquation(Base):
         super().__init__()
         self.degree=0 #元数
         self.order=0 #次幂数
-        self.result=0 #结果（一元：int，多元：dict）
+        self.result:Union[int,dict] #结果（一元：int，多元：dict）
         self.eq='' #方程
         self.ignore=() #忽略的未知数
         self.value=() #忽略数的值
@@ -27,7 +28,7 @@ class BaseEasyEquation(Base):
             self.eq.replace('**','^') #防止误判为乘号，使用exec()时应转回
             self.eq=self.tool.initEq(self.eq)
             self.eq=self.tool.replace_unknown(self.eq,self.ignore,self.value)
-            if self.syntax_error():
+            if self.syntax_error(): #语法错误
                 raise SyntaxError("Invalid input data.")
             else:
                 self.make() #给出结果
@@ -47,7 +48,7 @@ class BaseEasyEquation(Base):
         else:
             return False
     def get(self):
-        return self.result   
+        return self.result #返回结果
 class BaseReturn():
     '''e: str= Equation String'''
     def __init__(self):
@@ -116,6 +117,7 @@ class BaseReturn():
             if e[i] in LETTERS and e[i] not in ignore:
                 cache.add(e[i])
         return tuple(cache)
+    def no
     def SymbolIsConnect(self,e:str):
         for i in range(len(e)-1):
             if (e[i] in OPERATOR and e[i+1] in OPERATOR) or (e[i] in LEFTPARENTHESIS and e[i+1] in RIGHTPARENTHESIS):
