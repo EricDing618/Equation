@@ -26,7 +26,7 @@ class BaseEasyEquation(Base):
             raise ValueError("len(ignore) != len(value).")
         else:
             self.eq.replace('**','^') #防止误判为乘号，使用exec()时应转回
-            self.eq=self.tool.initEq(self.eq)
+            self.eq=self.tool.stdEq(self.eq)
             self.eq=self.tool.replace_unknown(self.eq,self.ignore,self.value)
             if self.syntax_error(): #语法错误
                 raise SyntaxError("Invalid input data.")
@@ -133,24 +133,50 @@ class BaseReturn():
                 return_=True
                 break
         return return_
-            
-    def initEq(self,e:str):
+    
+    def plus_less(self,e:str)->str:
+        '''将加法和减法混合的符号化简'''
+        c1=e
+        c2=[]
+        for i in range(len(c1)-1):
+            front=c1[i];back=c1[i+1]
+            if front=='+':
+                if back=='-':
+                    c2.append('-')
+                elif back=='+':
+                    c2.append('+')
+                else:
+                    c2.append(front)
+            elif front=='-':
+                if back=='+':
+                    c2.append('-')
+                elif back=='-':
+                    c2.append('+')
+                else:
+                    c2.append(front)
+            else:
+                c2.append(front)
+        c2=''.join(c2)
+        for i in ('++','+-','-+','--'):
+            if i in c2:
+                c2=self.plus_less(c2)
+            else:
+                return c2
+
+    def stdEq(self,e:str):
         '''方程标准化'''
         c1=e
         c2=[]
         # 去除多余空格
         c1=c1.replace(' ','')
         # 去除多余符号
-        c1=c1.replace('+-','-')
-        c1=c1.replace('--','+')
-        c1=c1.replace('++','+') 
-        c1=c1.replace('+-','-')
-        c1=c1.replace('-+','-')
+        c1=self.plus_less(c1)
+        # 括号间添加乘号
         for r in RIGHTPARENTHESIS:
             for l in LEFTPARENTHESIS:
                 c1=c1.replace(r+l,r+'*'+l)
         c1=c1.replace('**','^') #防止误判为乘号，使用exec()时应转回
-        #添加乘号
+        #第二次添加乘号
         for i in range(len(c1)-1):
             front=c1[i];back=c1[i+1]
             if (

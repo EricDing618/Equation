@@ -24,7 +24,7 @@ def demo():
 
 def test():
     a=BaseReturn()
-    print(a.replace_unknown(a.initEq('35 (ab+3) (ab+-3)**5'),('a','b'),('2','3')))
+    print(a.replace_unknown(a.stdEq('35 (ab+++--+3) (ab+-3)**5'),('a','b'),('2','3')))
 
 if __name__=='__main__':
     test()
