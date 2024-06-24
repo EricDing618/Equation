@@ -151,8 +151,8 @@ class BaseReturn():
         '''方程标准化'''
         c1=e
         c2=[]
-        # 去除多余空格
-        c1=c1.replace(' ','')
+        # 去除多余空格，更正全角为半角符号
+        c1=c1.replace(' ','').replace('（','(').replace('）',')')
         # 去除多余符号
         c1=self.plus_less(c1)
         # 括号间添加乘号
