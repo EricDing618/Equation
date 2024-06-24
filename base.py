@@ -15,9 +15,11 @@ class BaseEasyEquation(Base):
         self.eq='' #方程
         self.ignore=() #忽略的未知数
         self.value=() #忽略数的值
+
     def make(self):
         print(f'equation: {self.eq}')
         print(f'result: {self.result}')
+
     def give(self,e:str,ignore:tuple=(),value:tuple=()):
         self.eq = e
         self.ignore=ignore
@@ -32,8 +34,10 @@ class BaseEasyEquation(Base):
                 raise SyntaxError("Invalid input data.")
             else:
                 self.make() #给出结果
+
     def type_(self):
         return self.__class__.__name__
+    
     def syntax_error(self):
         #print(self.tool.sm_parenthesis('3[a+1]*b'))
         if (
@@ -47,19 +51,22 @@ class BaseEasyEquation(Base):
             return True
         else:
             return False
+        
     def get(self):
         return self.result #返回结果
+    
+
 class BaseReturn():
     '''e: str= Equation String'''
     def __init__(self):
         super().__init__()
+
     def plus(self,e:str):
         return e.split('+')
     def less(self,e:str):
         return e.split('-')
     def times(self,e:str):
         return e.split('*')
-    
     def divide(self,e:str):
         return e.split('/')
     
