@@ -117,7 +117,28 @@ class BaseReturn():
                 return '(' in e and ')' in e
             case _:
                 raise SyntaxError
-            
+
+    def simplification_parenthesis(self,e:str,ignore:tuple):
+        c1=e
+
+        c1=self.big_parenthesis(c1)
+        for i in range(len(c1)):
+            if len(self.unknown(e,ignore))==0:
+                c1[i]=str(eval(c1[i]))
+        c1=''.join(c1)
+
+        c1=self.mid_parenthesis(c1)
+        for i in range(len(c1)):
+            if len(self.unknown(e,ignore))==0:
+                c1[i]=str(eval(c1[i]))
+        c1=''.join(c1)
+
+        c1=self.sm_parenthesis(c1)
+        for i in range(len(c1)):
+            if len(self.unknown(e,ignore))==0:
+                c1[i]=str(eval(c1[i]))
+        c1=''.join(c1)
+        return c1
     def highest_power(self,e:str)->int:
         cache=e.split('^')
         if len(cache) > 1:
@@ -143,7 +164,7 @@ class BaseReturn():
                 return_=True
                 break
         return return_
-    def plus_less(self, e: str):
+    def simplification_plus_less(self, e: str):
         '''将加法和减法混合的符号化简'''
         c1 = e
         while ('+-' in c1) or ('-+' in c1) or ('++' in c1) or ('--' in c1):
@@ -157,7 +178,7 @@ class BaseReturn():
         # 去除多余空格，更正全角为半角符号
         c1=c1.replace(' ','').replace('（','(').replace('）',')')
         # 去除多余符号
-        c1=self.plus_less(c1)
+        c1=self.simplification_plus_less(c1)
         # 括号间添加乘号
         for r in RIGHTPARENTHESIS:
             for l in LEFTPARENTHESIS:
@@ -206,7 +227,7 @@ class BaseReturn():
         
 
     #被废弃的方法 
-    def _old__plus_less(self,e:str):
+    def _old__simplification_plus_less(self,e:str):
         '''将加法和减法混合的符号化简'''
         c1=e
         c2=True

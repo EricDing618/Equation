@@ -1,6 +1,5 @@
 from base import *
 
-
 class OneOne(BaseEasyEquation):
     def __init__(self):
         super().__init__()
@@ -13,4 +12,7 @@ class OneOne(BaseEasyEquation):
             left=str(eval(left))
         elif len(self.tool.unknown(right,self.ignore))==0:
             right=str(eval(right))
+        else:
+            left=self.tool.simplification_parenthesis(left,self.ignore)
+            right=self.tool.simplification_parenthesis(right,self.ignore)
             
