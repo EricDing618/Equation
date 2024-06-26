@@ -1,6 +1,7 @@
 import re
-from config import *
 from typing import Union
+from config import *
+from exception import *
 
 class Base:
     def __init__(self):
@@ -25,13 +26,13 @@ class BaseEasyEquation(Base):
         self.ignore=ignore
         self.value=value
         if len(self.ignore) != len(self.value): #忽略数与忽略数的值个数不相等
-            raise ValueError("len(ignore) != len(value).")
+            raise EquationSyntaxError
         else:
-            self.eq.replace('**','^') #防止误判为乘号，使用exec()时应将“^”转回为“**”！
+            self.eq.replace('**','^') #防止误判为乘号，使用eval()时应将“^”转回为“**”！
             self.eq=self.tool.stdEq(self.eq)
             self.eq=self.tool.replace_unknown(self.eq,self.ignore,self.value)
             if self.syntax_error(): #语法错误
-                raise SyntaxError("Invalid input data.")
+                raise EquationSyntaxError
             else:
                 self.make() #给出结果
 
@@ -159,7 +160,7 @@ class BaseReturn():
         for r in RIGHTPARENTHESIS:
             for l in LEFTPARENTHESIS:
                 c1=c1.replace(r+l,r+'*'+l)
-        c1=c1.replace('**','^') #防止误判为乘号，使用exec()时应将“^”转回为“**”！
+        c1=c1.replace('**','^') #防止误判为乘号，使用eval()时应将“^”转回为“**”！
         #第二次添加乘号
         for i in range(len(c1)-1):
             front=c1[i];back=c1[i+1]
