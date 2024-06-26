@@ -12,7 +12,7 @@ class BaseEasyEquation(Base):
         super().__init__()
         self.degree=0 #元数
         self.order=0 #次幂数
-        self.result:Union[int,dict] #结果（一元：int，多元：dict）
+        self.result:Union[int,dict,None] #结果（一元：int，多元：dict）
         self.eq='' #方程
         self.ignore=() #忽略的未知数
         self.value=() #忽略数的值
@@ -33,6 +33,8 @@ class BaseEasyEquation(Base):
             self.eq=self.tool.replace_unknown(self.eq,self.ignore,self.value)
             if self.syntax_error(): #语法错误
                 raise EquationSyntaxError
+            elif len(self.tool.unknown(self.eq,self.ignore))==0: #无未知数
+                self.result=None
             else:
                 self.make() #给出结果
 
