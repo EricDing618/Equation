@@ -121,6 +121,7 @@ class BaseReturn():
     def simplification_parenthesis(self,e:str,ignore:tuple):
         c1=e
 
+        #化简括号无
         c1=self.big_parenthesis(c1)
         for i in range(len(c1)):
             if len(self.unknown(e,ignore))==0:
@@ -138,6 +139,7 @@ class BaseReturn():
             if len(self.unknown(e,ignore))==0:
                 c1[i]=str(eval(c1[i]))
         c1=''.join(c1)
+
         return c1
     def highest_power(self,e:str)->int:
         cache=e.split('^')
@@ -164,6 +166,7 @@ class BaseReturn():
                 return_=True
                 break
         return return_
+    
     def simplification_plus_less(self, e: str):
         '''将加法和减法混合的符号化简'''
         c1 = e
