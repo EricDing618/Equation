@@ -6,13 +6,12 @@ class OneOne(BaseEasyEquation):
         self.degree=1 #元数
         self.order=1 #次幂数
 
-    def make(self): #最后赋值给self.result
+    def make(self): #最后赋值给self.result，不是return
         left,right=self.tool.amount(self.eq) #左右分开
-        if len(self.tool.unknown(left,self.ignore))==0:
+        if len(self.tool.unknown(left,self.ignore))==0: #左边没有未知数
             left=str(eval(left))
-        elif len(self.tool.unknown(right,self.ignore))==0:
+        elif len(self.tool.unknown(right,self.ignore))==0: #右边没有未知数
             right=str(eval(right))
-        else:
-            left=self.tool.simplification_parenthesis(left,self.ignore)
-            right=self.tool.simplification_parenthesis(right,self.ignore)
+        else: #两边都有未知数
+            
             

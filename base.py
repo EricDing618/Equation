@@ -118,29 +118,6 @@ class BaseReturn():
             case _:
                 raise SyntaxError
 
-    def simplification_parenthesis(self,e:str,ignore:tuple):
-        c1=e
-
-        #化简括号无
-        c1=self.big_parenthesis(c1)
-        for i in range(len(c1)):
-            if len(self.unknown(e,ignore))==0:
-                c1[i]=str(eval(c1[i]))
-        c1=''.join(c1)
-
-        c1=self.mid_parenthesis(c1)
-        for i in range(len(c1)):
-            if len(self.unknown(e,ignore))==0:
-                c1[i]=str(eval(c1[i]))
-        c1=''.join(c1)
-
-        c1=self.sm_parenthesis(c1)
-        for i in range(len(c1)):
-            if len(self.unknown(e,ignore))==0:
-                c1[i]=str(eval(c1[i]))
-        c1=''.join(c1)
-
-        return c1
     def highest_power(self,e:str)->int:
         cache=e.split('^')
         if len(cache) > 1:
