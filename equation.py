@@ -19,7 +19,11 @@ class OneOne(BaseEasyEquation):
                 left=self.tool.big_parenthesis(left)
                 for i in left[::2]: #括号外
                     if i:
-                        if i[-1] in ('*','/'):
+                        if i[-1] in ('*','/'): #和括号内有乘除关系
                             pass
+                        elif i[-1] in ('+','-'): #和括号内有加减关系
+                            pass
+                        else: #其他关系，如括号内次幂，未来考虑
+                            raise EquationFutureWarning
 
             
