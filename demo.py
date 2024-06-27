@@ -23,9 +23,19 @@ def demo():
                     print(a.get())
 
 def test():
-    a=BaseReturn()
-    print(a.replace_unknown(a.stdEq('35 (ab++--++--+++-+3) （ab+-3）**5'),('a','b'),('2','3')))
-    print(a.sm_parenthesis('(1+5)(3+4)'))
+    tool=BaseReturn()
+    eq=BaseEasyEquation()
+
+    replace_test='35 (ab++--++--+++-+3) （ab+-3）**5'
+    print(tool.replace_unknown(tool.stdEq(replace_test),('a','b'),('2','3')))
+
+    parenthesis_test='(1+5)(3+4)'
+    print('Outside:',tool.sm_parenthesis(parenthesis_test)[::2])
+    print('Inside:',tool.sm_parenthesis(parenthesis_test)[1::2])
+
+    eq_main_test='  '
+    eq.give(eq_main_test,debug=True)
+    print('SyntaxError?:',eq.syntax_error())
 
 if __name__=='__main__':
     test()

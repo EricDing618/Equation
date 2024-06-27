@@ -21,7 +21,7 @@ class BaseEasyEquation(Base):
         print(f'equation: {self.eq}')
         print(f'result: {self.result}')
 
-    def give(self,e:str,ignore:tuple=(),value:tuple=()):
+    def give(self,e:str,ignore:tuple=(),value:tuple=(),debug=False):
         self.eq = e
         self.ignore=ignore
         self.value=value
@@ -32,7 +32,8 @@ class BaseEasyEquation(Base):
             self.eq=self.tool.stdEq(self.eq)
             self.eq=self.tool.replace_unknown(self.eq,self.ignore,self.value)
             if self.syntax_error(): #语法错误
-                raise EquationSyntaxError
+                if not debug:
+                    raise EquationSyntaxError
             elif len(self.tool.unknown(self.eq,self.ignore))==0: #无未知数
                 self.result=None
             else:

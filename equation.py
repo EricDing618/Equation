@@ -13,5 +13,13 @@ class OneOne(BaseEasyEquation):
         elif len(self.tool.unknown(right,self.ignore))==0: #右边没有未知数
             right=str(eval(right))
         else: #两边都有未知数
-            
+
+            #处理左边
+            if self.tool.include_parenthesis(left,0): #含有大括号
+                left=self.tool.big_parenthesis(left)
+                for i in left[::2]: #括号外
+                    if i:
+                        if i[-1] in ('*','/'):
+                            pass
+
             
