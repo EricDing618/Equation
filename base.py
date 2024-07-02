@@ -5,7 +5,7 @@ from exception import *
 
 class Base:
     def __init__(self):
-        '''e: str= Equation String'''
+        ''':param e: 方程式字符串'''
 
 class EasyTools(Base):
     def plus(self,e:str):
