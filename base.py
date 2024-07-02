@@ -26,7 +26,7 @@ class OldTools(Base):
                 c2=False
                 return c1
             
-            
+
 class stdTools(Base):
     def simplification_plus_less(self, e: str):
         '''将加法和减法混合的符号化简'''
@@ -193,7 +193,7 @@ class BaseEasyEquation(BaseEquation):
         return self.result #返回结果
     
 
-class BaseReturn(EasyTools,ParenthesisTools):
+class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
     def __init__(self):
         super().__init__()
 
