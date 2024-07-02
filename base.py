@@ -5,9 +5,71 @@ from exception import *
 
 class Base:
     def __init__(self):
+        '''e: str= Equation String'''
+
+class EasyTools(Base):
+    def plus(self,e:str):
+        return e.split('+')
+    def less(self,e:str):
+        return e.split('-')
+    def times(self,e:str):
+        return e.split('*')
+    def divide(self,e:str):
+        return e.split('/')
+    
+    def amount(self,e:str):
+        return e.split('=')
+
+
+class ParenthesisTools(Base):
+    def big_parenthesis(self,e:str):
+        c1=e.split('{')
+        c2:list=[]
+        for i in range(len(c1)):
+            c3=c1[i].split("}")
+            for j in range(len(c3)):
+                c2.append(c3[j])
+        return c2
+    
+    def mid_parenthesis(self,e:str):
+        c1=e.split('[')
+        c2:list=[]
+        for i in range(len(c1)):
+            c3=c1[i].split("]")
+            for j in range(len(c3)):
+                c2.append(c3[j])
+        return c2
+    
+    def sm_parenthesis(self,e:str):
+        c1=e.split('(')
+        c2:list=[]
+        for i in range(len(c1)):
+            c3=c1[i].split(")")
+            for j in range(len(c3)):
+                c2.append(c3[j])
+        return c2
+    
+    def include_parenthesis(self,e:str,type_:int):
+        '''type_: int
+        = 0: Big parenthesis
+        = 1: Middle parenthesis
+        = 2: Small parenthesis'''
+        match type_:
+            case 0:
+                return '{' in e and '}' in e
+            case 1:
+                return '[' in e and ']' in e
+            case 2:
+                return '(' in e and ')' in e
+            case _:
+                raise SyntaxError
+
+
+class BaseEquation(Base):
+    def __init__(self):
         self.tool=BaseReturn()
 
-class BaseEasyEquation(Base):
+class BaseEasyEquation(BaseEquation):
     def __init__(self):
         super().__init__()
         self.degree=0 #元数
@@ -60,64 +122,9 @@ class BaseEasyEquation(Base):
         return self.result #返回结果
     
 
-class BaseReturn():
-    '''e: str= Equation String'''
+class BaseReturn(EasyTools,ParenthesisTools):
     def __init__(self):
         super().__init__()
-
-    def plus(self,e:str):
-        return e.split('+')
-    def less(self,e:str):
-        return e.split('-')
-    def times(self,e:str):
-        return e.split('*')
-    def divide(self,e:str):
-        return e.split('/')
-    
-    def amount(self,e:str):
-        return e.split('=')
-    
-    def big_parenthesis(self,e:str):
-        c1=e.split('{')
-        c2:list=[]
-        for i in range(len(c1)):
-            c3=c1[i].split("}")
-            for j in range(len(c3)):
-                c2.append(c3[j])
-        return c2
-    
-    def mid_parenthesis(self,e:str):
-        c1=e.split('[')
-        c2:list=[]
-        for i in range(len(c1)):
-            c3=c1[i].split("]")
-            for j in range(len(c3)):
-                c2.append(c3[j])
-        return c2
-    
-    def sm_parenthesis(self,e:str):
-        c1=e.split('(')
-        c2:list=[]
-        for i in range(len(c1)):
-            c3=c1[i].split(")")
-            for j in range(len(c3)):
-                c2.append(c3[j])
-        return c2
-    
-    def include_parenthesis(self,e:str,type_:int):
-        '''type_: int
-        = 0: Big parenthesis
-        = 1: Middle parenthesis
-        = 2: Small parenthesis'''
-        match type_:
-            case 0:
-                return '{' in e and '}' in e
-            case 1:
-                return '[' in e and ']' in e
-            case 2:
-                return '(' in e and ')' in e
-            case _:
-                raise SyntaxError
 
     def highest_power(self,e:str)->int:
         cache=e.split('^')
