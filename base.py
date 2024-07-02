@@ -7,6 +7,72 @@ class Base:
     def __init__(self):
         ''':param e: 方程式字符串'''
 
+
+class OldTools(Base):
+    '''被废弃的方法''' 
+    def _old__simplification_plus_less(self,e:str):
+        '''将加法和减法混合的符号化简'''
+        c1=e
+        c2=True
+        c3=0
+        while c2:
+            c1 = c1.replace('+-', '-').replace('-+', '-').replace('++', '+').replace('--', '+')
+            for i in ('++','--','+-','-+'):
+                if i not in c1:
+                    c3+=1
+                else:
+                    c3-=1
+            if c3>=4: #保险起见，设置范围
+                c2=False
+                return c1
+            
+            
+class stdTools(Base):
+    def simplification_plus_less(self, e: str):
+        '''将加法和减法混合的符号化简'''
+        c1 = e
+        while ('+-' in c1) or ('-+' in c1) or ('++' in c1) or ('--' in c1):
+            c1 = c1.replace('+-', '-').replace('-+', '-').replace('++', '+').replace('--', '+')
+        return c1
+        
+    def stdEq(self,e:str):
+        '''方程标准化'''
+        c1=e
+        c2=[]
+        # 去除多余空格，更正全角为半角符号
+        c1=c1.replace(' ','').replace('（','(').replace('）',')')
+        # 去除多余符号
+        c1=self.simplification_plus_less(c1)
+        # 括号间添加乘号
+        for r in RIGHTPARENTHESIS:
+            for l in LEFTPARENTHESIS:
+                c1=c1.replace(r+l,r+'*'+l)
+        c1=c1.replace('**','^') #防止误判为乘号，使用eval()时应将“^”转回为“**”！
+        #第二次添加乘号
+        for i in range(len(c1)-1):
+            front=c1[i];back=c1[i+1]
+            if (
+                (front in LETTERS and back in LETTERS)
+                or (front in LETTERS and back in NUMBERS)
+                or (front in NUMBERS and back in LETTERS)
+                or (front in NUMBERS and back in LEFTPARENTHESIS)
+                or (front in RIGHTPARENTHESIS and back in NUMBERS)
+                ):
+                c2.append(front+'*'+back)
+            else:
+                c2.append(front+back)
+        for i in range(len(c2)):
+            if i != 0:
+                c2[i]=c2[i][1:]
+        return ''.join(c2)
+
+    def replace_unknown(self,e:str,ignore:tuple,value:tuple):
+        cache=e
+        for ign,val in zip(ignore,value):
+            cache=cache.replace(ign,str(val))
+        return cache
+    
+
 class EasyTools(Base):
     def plus(self,e:str):
         return e.split('+')
@@ -157,50 +223,6 @@ class BaseReturn(EasyTools,ParenthesisTools):
                 break
         return return_
     
-    def simplification_plus_less(self, e: str):
-        '''将加法和减法混合的符号化简'''
-        c1 = e
-        while ('+-' in c1) or ('-+' in c1) or ('++' in c1) or ('--' in c1):
-            c1 = c1.replace('+-', '-').replace('-+', '-').replace('++', '+').replace('--', '+')
-        return c1
-        
-    def stdEq(self,e:str):
-        '''方程标准化'''
-        c1=e
-        c2=[]
-        # 去除多余空格，更正全角为半角符号
-        c1=c1.replace(' ','').replace('（','(').replace('）',')')
-        # 去除多余符号
-        c1=self.simplification_plus_less(c1)
-        # 括号间添加乘号
-        for r in RIGHTPARENTHESIS:
-            for l in LEFTPARENTHESIS:
-                c1=c1.replace(r+l,r+'*'+l)
-        c1=c1.replace('**','^') #防止误判为乘号，使用eval()时应将“^”转回为“**”！
-        #第二次添加乘号
-        for i in range(len(c1)-1):
-            front=c1[i];back=c1[i+1]
-            if (
-                (front in LETTERS and back in LETTERS)
-                or (front in LETTERS and back in NUMBERS)
-                or (front in NUMBERS and back in LETTERS)
-                or (front in NUMBERS and back in LEFTPARENTHESIS)
-                or (front in RIGHTPARENTHESIS and back in NUMBERS)
-                ):
-                c2.append(front+'*'+back)
-            else:
-                c2.append(front+back)
-        for i in range(len(c2)):
-            if i != 0:
-                c2[i]=c2[i][1:]
-        return ''.join(c2)
-
-    def replace_unknown(self,e:str,ignore:tuple,value:tuple):
-        cache=e
-        for ign,val in zip(ignore,value):
-            cache=cache.replace(ign,str(val))
-        return cache
-    
     def others(self,e:str):
         cache:list=[]
         for i in range(len(e)):
@@ -218,20 +240,3 @@ class BaseReturn(EasyTools,ParenthesisTools):
         else:
             return True
         
-
-    #被废弃的方法 
-    def _old__simplification_plus_less(self,e:str):
-        '''将加法和减法混合的符号化简'''
-        c1=e
-        c2=True
-        c3=0
-        while c2:
-            c1 = c1.replace('+-', '-').replace('-+', '-').replace('++', '+').replace('--', '+')
-            for i in ('++','--','+-','-+'):
-                if i not in c1:
-                    c3+=1
-                else:
-                    c3-=1
-            if c3>=4: #保险起见，设置范围
-                c2=False
-                return c1
