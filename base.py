@@ -84,6 +84,12 @@ class BaseEasyEquation(BaseEquation):
         print(f'result: {self.result}')
 
     def give(self,e:str,ignore:tuple=(),value:tuple=(),debug=False):
+        """
+        :param ignore: 要忽略的字母，可以是常数或系数。
+        :param value: 忽略的字母对应的值。
+        :param debug: False时，方程有语法错误将报错，否则停止运行并可以使用其他函数（详见`demo.py`）
+        :return: None
+        """
         self.eq = e
         self.ignore=ignore
         self.value=value
@@ -105,7 +111,6 @@ class BaseEasyEquation(BaseEquation):
         return self.__class__.__name__
     
     def syntax_error(self):
-        #print(self.tool.sm_parenthesis('3[a+1]*b'))
         if (
             len(self.tool.amount(self.eq)) != 2 #等号错误
             or self.tool.highest_power(self.eq) != self.order #次幂不符
