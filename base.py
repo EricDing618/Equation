@@ -74,17 +74,58 @@ class stdTools(Base):
     
 
 class EasyTools(Base):
-    def plus(self,e:str):
-        return e.split('+')
-    def less(self,e:str):
-        return e.split('-')
-    def times(self,e:str):
-        return e.split('*')
-    def divide(self,e:str):
-        return e.split('/')
+    def __init__(self):
+        '''
+        :param e: 方程式字符串
+        :param mode: 返回模式，0:返回分割内容 1:返回符号个数
+        '''
+
+    def plus(self,e:str,mode=0):
+        c1=e.split('+')
+        match mode:
+            case 0:
+                return c1
+            case 1:
+                return len(c1)-1
+            case _:
+                raise SyntaxError
+    def less(self,e:str,mode=0):
+        c1=e.split('-')
+        match mode:
+            case 0:
+                return c1
+            case 1:
+                return len(c1)-1
+            case _:
+                raise SyntaxError
+    def times(self,e:str,mode=0):
+        c1=e.split('*')
+        match mode:
+            case 0:
+                return c1
+            case 1:
+                return len(c1)-1
+            case _:
+                raise SyntaxError
+    def divide(self,e:str,mode=0):
+        c1=e.split('/')
+        match mode:
+            case 0:
+                return c1
+            case 1:
+                return len(c1)-1
+            case _:
+                raise SyntaxError
     
-    def amount(self,e:str):
-        return e.split('=')
+    def amount(self,e:str,mode=0):
+        c1=e.split('=')
+        match mode:
+            case 0:
+                return c1
+            case 1:
+                return len(c1)-1
+            case _:
+                raise SyntaxError
 
 
 class ParenthesisTools(Base):
@@ -115,20 +156,41 @@ class ParenthesisTools(Base):
                 c2.append(c3[j])
         return c2
     
-    def include_parenthesis(self,e:str,type_:int):
-        '''type_: int
+    def include_parenthesis(self,e:str,type_:int|tuple|list):
+        '''type_: int| tuple| list
         = 0: Big parenthesis
         = 1: Middle parenthesis
-        = 2: Small parenthesis'''
-        match type_:
-            case 0:
-                return '{' in e and '}' in e
-            case 1:
-                return '[' in e and ']' in e
-            case 2:
-                return '(' in e and ')' in e
-            case _:
-                raise SyntaxError
+        = 2: Small parenthesis
+        = 3: Any parenthesis
+        = 4: All parenthesis'''
+        def return_(type_):
+            match type_:
+                case 0:
+                    return '{' in e and '}' in e
+                case 1:
+                    return '[' in e and ']' in e
+                case 2:
+                    return '(' in e and ')' in e
+                case 3:
+                    return ('{' in e and '}' in e) or ('[' in e and ']' in e) or ('(' in e and ')' in e)
+                case 4:
+                    return ('{' in e and '}' in e) and ('[' in e and ']' in e) and ('(' in e and ')' in e)
+                case _:
+                    raise SyntaxError
+                
+        if isinstance(type_,int):
+            return return_(type_)
+        elif isinstance(type_,(tuple,list)):
+            c1=[]
+            for i in type_:
+                if i not in (0,1,2):
+                    raise SyntaxError
+                else:
+                    c1.append(return_(type_))
+            return (False not in c1)
+        else:
+            raise SyntaxError
+
 
 
 class BaseEquation(Base):
@@ -161,7 +223,7 @@ class BaseEasyEquation(BaseEquation):
         self.value=value
         if len(self.ignore) != len(self.value): #忽略数与忽略数的值个数不相等
             raise EquationSyntaxError
-        else:
+        else: #注意调用函数的顺序（转换幂运算符 ->标准化方程 ->替换未知数），否则会出现BUG！
             self.eq.replace('**','^') #防止误判为乘号，使用eval()时应将“^”转回为“**”！
             self.eq=self.tool.stdEq(self.eq)
             self.eq=self.tool.replace_unknown(self.eq,self.ignore,self.value)
@@ -178,7 +240,7 @@ class BaseEasyEquation(BaseEquation):
     
     def syntax_error(self):
         if (
-            len(self.tool.amount(self.eq)) != 2 #等号错误
+            self.tool.amount(self.eq,1) != 1 #等号错误
             or self.tool.highest_power(self.eq) != self.order #次幂不符
             or len(self.tool.unknown(self.eq,self.ignore)) != self.degree #未知数数量不符
             or len(self.tool.others(self.eq)) > 0 #含有与方程无关的字符
@@ -209,6 +271,7 @@ class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
             return 1
         
     def unknown(self,e:str,ignore:tuple):
+        '''返回所有未知数'''
         cache=set()
         for i in range(len(e)):
             if e[i] in LETTERS and e[i] not in ignore:
@@ -216,6 +279,7 @@ class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
         return tuple(cache)
     
     def SymbolIsConnect(self,e:str):
+        '''运算符是否有相连的情况'''
         return_=False
         for i in range(len(e)-1):
             if (e[i] in OPERATOR and e[i+1] in OPERATOR) or (e[i] in LEFTPARENTHESIS and e[i+1] in RIGHTPARENTHESIS):
@@ -224,6 +288,7 @@ class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
         return return_
     
     def others(self,e:str):
+        '''和方程无关的字符'''
         cache:list=[]
         for i in range(len(e)):
             if e[i] not in ALL:
@@ -231,6 +296,7 @@ class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
         return tuple(cache)
     
     def parenthesis_error(self,e:str):
+        '''括号是否不对称'''
         if (
             len(re.findall('\(+',e))==len(re.findall('\)+',e))
             and len(re.findall('\[+',e))==len(re.findall('\]+',e))
@@ -239,4 +305,25 @@ class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
             return False
         else:
             return True
+    
+    def level(self,e:str,ignore:tuple):
+        '''方程难度等级'''
+        l = 0
+
+        if len(self.unknown(e,ignore)) > 0:
+            l+=1
+
+        if self.include_parenthesis(e,4):
+            l+=2
+        elif self.include_parenthesis(e,3):
+            l+=1
         
+        if self.highest_power() > 1:
+            l+=2
+
+        if self.plus(e,1) > 0 and self.less(e,1) > 0:
+            l+=1
+        if self.times(e,1) > 0 and self.divide(e,1) > 0:
+            l+=1
+            
+        return l
