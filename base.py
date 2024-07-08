@@ -233,6 +233,7 @@ class BaseEasyEquation(BaseEquation):
             elif len(self.tool.unknown(self.eq,self.ignore))==0: #无未知数
                 self.result=None
             else:
+                self.left,self.right=self.tool.amount(self.eq) #左右分开
                 self.make() #给出结果
 
     def type_(self):
@@ -325,5 +326,5 @@ class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
             l+=1
         if self.times(e,1) > 0 and self.divide(e,1) > 0:
             l+=1
-            
+
         return l
