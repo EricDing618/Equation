@@ -37,5 +37,8 @@ def test():
     eq.give(eq_main_test,debug=True)
     print('SyntaxError?:',eq.syntax_error())
 
+    eq_level_test='a+1=2'
+    print(tool.level(eq_level_test,()))
+
 if __name__=='__main__':
     test()

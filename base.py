@@ -319,12 +319,12 @@ class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
         elif self.include_parenthesis(e,3):
             l+=1
         
-        if self.highest_power() > 1:
+        if self.highest_power(e) > 1:
             l+=2
 
-        if self.plus(e,1) > 0 and self.less(e,1) > 0:
+        if self.plus(e,1) > 0 or self.less(e,1) > 0:
             l+=1
-        if self.times(e,1) > 0 and self.divide(e,1) > 0:
+        if self.times(e,1) > 0 or self.divide(e,1) > 0:
             l+=1
 
         return l
