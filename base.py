@@ -156,7 +156,7 @@ class ParenthesisTools(Base):
                 c2.append(c3[j])
         return c2
     
-    def include_parenthesis(self,e:str,type_:int|tuple|list):
+    def include_parenthesis(self,e:str,type_:Union[int,tuple,list]):
         '''type_: int| tuple| list
         = 0: Big parenthesis
         = 1: Middle parenthesis
@@ -202,7 +202,7 @@ class BaseEasyEquation(BaseEquation):
         super().__init__()
         self.degree=0 #元数
         self.order=0 #次幂数
-        self.result:Union[int,dict,None] #结果（一元：int，多元：dict）
+        self.result:Union[int,dict,None]=None #结果（一元：int，多元：dict）
         self.eq='' #方程
         self.ignore=() #忽略的未知数
         self.value=() #忽略数的值
@@ -221,6 +221,7 @@ class BaseEasyEquation(BaseEquation):
         self.eq = e
         self.ignore=ignore
         self.value=value
+        self.debug=debug
         if len(self.ignore) != len(self.value): #忽略数与忽略数的值个数不相等
             raise EquationSyntaxError
         else: #注意调用函数的顺序（转换幂运算符 ->标准化方程 ->替换未知数），否则会出现BUG！
@@ -228,7 +229,7 @@ class BaseEasyEquation(BaseEquation):
             self.eq=self.tool.stdEq(self.eq)
             self.eq=self.tool.replace_unknown(self.eq,self.ignore,self.value)
             if self.syntax_error(): #语法错误
-                if not debug:
+                if not self.debug:
                     raise EquationSyntaxError
             elif len(self.tool.unknown(self.eq,self.ignore))==0: #无未知数
                 self.result=None
@@ -242,8 +243,8 @@ class BaseEasyEquation(BaseEquation):
     def syntax_error(self):
         if (
             self.tool.amount(self.eq,1) != 1 #等号错误
-            or self.tool.highest_power(self.eq) != self.order #次幂不符
-            or len(self.tool.unknown(self.eq,self.ignore)) != self.degree #未知数数量不符
+            or (self.tool.highest_power(self.eq) != self.order and not self.debug) #次幂不符
+            or (len(self.tool.unknown(self.eq,self.ignore)) != self.degree and not self.debug) #未知数数量不符
             or len(self.tool.others(self.eq)) > 0 #含有与方程无关的字符
             or self.tool.parenthesis_error(self.eq) #括号个数不对称
             or self.tool.SymbolIsConnect(self.eq) #符号相连
@@ -260,7 +261,7 @@ class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
     def __init__(self):
         super().__init__()
 
-    def highest_power(self,e:str)->int:
+    def highest_power(self,e:str,ignore=())->int:
         cache=e.split('^')
         if len(cache) > 1:
             for i in range(1,len(cache)):
@@ -268,8 +269,10 @@ class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
             del cache[0]
             cache=max(cache)
             return cache
-        else:
+        elif len(self.unknown(e,ignore)) > 0:
             return 1
+        else:
+            return 0
         
     def unknown(self,e:str,ignore:tuple):
         '''返回所有未知数'''
