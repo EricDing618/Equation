@@ -1,4 +1,5 @@
 from equation import *
+import pprint
 
 def demo():
     a=OneOne()
@@ -46,4 +47,4 @@ if __name__=='__main__':
     test=tests()
     for eq in eqs:
         print_info[eq]=test.level_test(test.replace_test(eq,(),()),())
-    print(print_info)
+    pprint.pprint(print_info,indent=2,sort_dicts=False)
