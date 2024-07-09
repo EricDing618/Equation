@@ -22,23 +22,28 @@ def demo():
                 else:
                     print(a.get())
 
-def test():
-    tool=BaseReturn()
-    eq=BaseEasyEquation()
+class tests():
+    def __init__(self):
+        self.tool=BaseReturn()
+        self.eq=BaseEasyEquation()
 
-    replace_test='35 (ab++--++--+++-+3) （ab+-3）**5'
-    print(tool.replace_unknown(tool.stdEq(replace_test),('a','b'),('2','3')))
+    def replace_test(self,e='35 (ab++--++--+++-+3) （ab+-3）**5',ignore=('a','b'),value=('2','3')):
+        return self.tool.replace_unknown(self.tool.stdEq(e),ignore,value)
 
-    parenthesis_test='(1+5)(3+4)'
-    print('Outside:',tool.sm_parenthesis(parenthesis_test)[::2])
-    print('Inside:',tool.sm_parenthesis(parenthesis_test)[1::2])
+    def parenthesis_test(self,e='(1+5)(3+4)'):
+        return f'Outside: {self.tool.sm_parenthesis(e)[::2]}\nInside: {self.tool.sm_parenthesis(e)[1::2]}'
 
-    eq_main_test='  '
-    eq.give(eq_main_test,debug=True)
-    print('SyntaxError?:',eq.syntax_error())
+    def syntax_test(self,e='  '):
+        self.eq.give(e,debug=True)
+        return f'SyntaxError?: {self.eq.syntax_error()}'
 
-    eq_level_test='a+1=2'
-    print(tool.level(eq_level_test,()))
+    def level_test(self,e='a+1=2',ignore=()):
+        return self.tool.level(e,ignore)
 
 if __name__=='__main__':
-    test()
+    eqs=['1+1=2','a=1','a+1=2','a*2+1=3','a*(2+1)=3','a*(2/1^2)=2','(a^2)*(2+1)=3','{a+1*[(3-2)^2]}=2']
+    print_info={}
+    test=tests()
+    for eq in eqs:
+        print_info[eq]=test.level_test(test.replace_test(eq,(),()),())
+    print(print_info)
