@@ -1,5 +1,5 @@
 import re
-import math
+import math,decimal
 from typing import Union
 from config import *
 from exception import *
@@ -262,6 +262,12 @@ class BaseEasyEquation(BaseEquation):
 class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
     def __init__(self):
         super().__init__()
+
+    def eq_eval(self,e:str):
+        if len(self.others(e)) > 0:
+            return None
+        else:
+            return eval(e)
 
     def highest_power(self,e:str,ignore=())->int:
         cache=e.split('^')
