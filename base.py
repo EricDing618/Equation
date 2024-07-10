@@ -1,4 +1,5 @@
 import re
+import math
 from typing import Union
 from config import *
 from exception import *
@@ -208,8 +209,9 @@ class BaseEasyEquation(BaseEquation):
         self.value=() #忽略数的值
 
     def make(self):
-        print(f'equation: {self.eq}')
-        print(f'result: {self.result}')
+        '''解方程核心方法'''
+        #print(f'equation: {self.eq}')
+        #print(f'result: {self.result}')
 
     def give(self,e:str,ignore:tuple=(),value:tuple=(),debug=False):
         """
@@ -302,9 +304,9 @@ class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
     def parenthesis_error(self,e:str):
         '''括号是否不对称'''
         if (
-            len(re.findall('\(+',e))==len(re.findall('\)+',e))
-            and len(re.findall('\[+',e))==len(re.findall('\]+',e))
-            and len(re.findall('\{+',e))==len(re.findall('\}+',e))
+            len(re.findall(r'\(+',e))==len(re.findall(r'\)+',e))
+            and len(re.findall(r'\[+',e))==len(re.findall(r'\]+',e))
+            and len(re.findall(r'\{+',e))==len(re.findall(r'\}+',e))
         ):
             return False
         else:
@@ -313,20 +315,36 @@ class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
     def level(self,e:str,ignore:tuple):
         '''方程难度等级'''
         l = 0
+        more_info={ #详细信息
+            "unknown":self.unknown(e,ignore),
+            "parenthesis":{
+                "all":self.include_parenthesis(e,4),
+                "any":self.include_parenthesis(e,3)
+            },
+            "highest_power":self.highest_power(e),
 
-        if len(self.unknown(e,ignore)) > 0:
+            "plus_or_less":self.plus(e,1) > 0 or self.less(e,1) > 0,
+            "plus":self.plus(e,1),
+            "less":self.less(e,1),
+
+            "times_or_divide":self.times(e,1) > 0 or self.divide(e,1) > 0,
+            "times":self.times(e,1),
+            "divide":self.divide(e,1)
+        }
+
+        if len(more_info['unknown']) > 0:
             l+=1
-            if self.include_parenthesis(e,4):
+            if more_info['parenthesis']['all']:
                 l+=2
-            elif self.include_parenthesis(e,3):
+            elif more_info['parenthesis']['any']:
                 l+=1
             
-            if self.highest_power(e) > 1:
+            if more_info['highest_power'] > 1:
                 l+=2
 
-            if self.plus(e,1) > 0 or self.less(e,1) > 0:
+            if more_info['plus_or_less']:
                 l+=1
-            if self.times(e,1) > 0 or self.divide(e,1) > 0:
+            if more_info['times_or_divide']:
                 l+=1
 
-        return l
+        return l,more_info

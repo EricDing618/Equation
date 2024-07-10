@@ -40,11 +40,13 @@ class tests():
         self.eq.give(e,debug=debug)
         return self.eq.syntax_error()
 
-    def level_test(self,e='a+1=2',ignore=()):
-        return self.tool.level(e,ignore)
+    def level_test(self,e='a+1=2',ignore=(),more=False):
+        if more:
+            return self.tool.level(e,ignore)
+        else:
+            return self.tool.level(e,ignore)[0]
 
 if __name__=='__main__':
-    eqs=['1+1=2','a=1','a+1=2','a*2+1=3','a*(2+1)=3','a*(2/1^2)=2','(a^2)*(2+1)=3','{a+1*[(3-2)^2]}=2']
     print_info={}
     test=tests()
 
@@ -53,10 +55,20 @@ if __name__=='__main__':
             return 'ok'
         else:
             return 'error'
-        
-    for eq in eqs:
+
+    def many_eqs(eqs:Union[list[str],tuple[str]]=['1+1=2','a=1','a+1=2','a*2+1=3','a*(2+1)=3','a*(2/1^2)=2','(a^2)*(2+1)=3','{a+1*[(3-2)^2]}=2']):
+        for eq in eqs:
+            print_info[eq] ={
+                'Level':test.level_test(test.replace_test(eq,(),()),()),
+                'Syntax':check_syntax(eq,(),())
+                }
+        pprint.pprint(print_info,width=4,indent=2,sort_dicts=False)
+
+    def one_eq(eq=''):
         print_info[eq] ={
             'Level':test.level_test(test.replace_test(eq,(),()),()),
             'Syntax':check_syntax(eq,(),())
             }
-    pprint.pprint(print_info,width=4,indent=2,sort_dicts=False)
+        pprint.pprint(print_info,width=4,indent=2,sort_dicts=False)
+
+    one_eq('23=a-2+1')
