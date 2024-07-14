@@ -11,7 +11,7 @@ class Base:
 
 class OldTools(Base):
     '''被废弃的方法''' 
-    def _old__simplification_plus_less(self,e:str):
+    def _old__simplification_add_subtract(self,e:str):
         '''将加法和减法混合的符号化简'''
         c1=e
         c2=True
@@ -29,7 +29,7 @@ class OldTools(Base):
             
 
 class stdTools(Base):
-    def simplification_plus_less(self, e: str):
+    def simplification_add_subtract(self, e: str):
         '''将加法和减法混合的符号化简'''
         c1 = e
         while ('+-' in c1) or ('-+' in c1) or ('++' in c1) or ('--' in c1):
@@ -43,7 +43,7 @@ class stdTools(Base):
         # 去除多余空格，更正全角为半角符号
         c1=c1.replace(' ','').replace('（','(').replace('）',')')
         # 去除多余符号
-        c1=self.simplification_plus_less(c1)
+        c1=self.simplification_add_subtract(c1)
         # 括号间添加乘号
         for r in RIGHTPARENTHESIS:
             for l in LEFTPARENTHESIS:
@@ -81,7 +81,7 @@ class EasyTools(Base):
         :param mode: 返回模式，0:返回分割内容 1:返回符号个数
         '''
 
-    def plus(self,e:str,mode=0):
+    def add(self,e:str,mode=0):
         c1=e.split('+')
         match mode:
             case 0:
@@ -90,7 +90,7 @@ class EasyTools(Base):
                 return len(c1)-1
             case _:
                 raise SyntaxError
-    def less(self,e:str,mode=0):
+    def subtract(self,e:str,mode=0):
         c1=e.split('-')
         match mode:
             case 0:
@@ -99,7 +99,7 @@ class EasyTools(Base):
                 return len(c1)-1
             case _:
                 raise SyntaxError
-    def times(self,e:str,mode=0):
+    def multiply(self,e:str,mode=0):
         c1=e.split('*')
         match mode:
             case 0:
@@ -118,7 +118,7 @@ class EasyTools(Base):
             case _:
                 raise SyntaxError
     
-    def amount(self,e:str,mode=0):
+    def equals(self,e:str,mode=0):
         c1=e.split('=')
         match mode:
             case 0:
@@ -236,7 +236,7 @@ class BaseEasyEquation(BaseEquation):
             elif len(self.tool.unknown(self.eq,self.ignore))==0: #无未知数
                 self.result=None
             else:
-                self.left,self.right=self.tool.amount(self.eq) #左右分开
+                self.left,self.right=self.tool.equals(self.eq) #左右分开
                 self.make() #给出结果
 
     def type_(self):
@@ -244,7 +244,7 @@ class BaseEasyEquation(BaseEquation):
     
     def syntax_error(self):
         if (
-            self.tool.amount(self.eq,1) != 1 #等号错误
+            self.tool.equals(self.eq,1) != 1 #等号错误
             or (self.tool.highest_power(self.eq) != self.order and not self.debug) #次幂不符
             or (len(self.tool.unknown(self.eq,self.ignore)) != self.degree and not self.debug) #未知数数量不符
             or len(self.tool.others(self.eq)) > 0 #含有与方程无关的字符
@@ -329,12 +329,12 @@ class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
             },
             "highest_power":self.highest_power(e),
 
-            "plus_or_less":self.plus(e,1) > 0 or self.less(e,1) > 0,
-            "plus":self.plus(e,1),
-            "less":self.less(e,1),
+            "add_or_subtract":self.add(e,1) > 0 or self.subtract(e,1) > 0,
+            "add":self.add(e,1),
+            "subtract":self.subtract(e,1),
 
-            "times_or_divide":self.times(e,1) > 0 or self.divide(e,1) > 0,
-            "times":self.times(e,1),
+            "multiply_or_divide":self.multiply(e,1) > 0 or self.divide(e,1) > 0,
+            "multiply":self.multiply(e,1),
             "divide":self.divide(e,1)
         }
 
@@ -348,9 +348,9 @@ class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
             if more_info['highest_power'] > 1:
                 l+=2
 
-            if more_info['plus_or_less']:
+            if more_info['add_or_subtract']:
                 l+=1
-            if more_info['times_or_divide']:
+            if more_info['multiply_or_divide']:
                 l+=1
 
         return l,more_info
