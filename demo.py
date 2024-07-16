@@ -71,7 +71,7 @@ if __name__=='__main__':
         a=[]
         with open('./testbook.txt','r',encoding='utf-8') as f:
             for i in f.readlines():
-                if i[:-1]=="\n":
+                if i[-1]=="\n":
                     a.append(i[:-1])
                 else:
                     a.append(i)
