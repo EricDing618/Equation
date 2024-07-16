@@ -10,7 +10,7 @@ class Base:
 
 
 class OldTools(Base):
-    '''被废弃的方法''' 
+    '''被废弃的方法,方法名：_old__+原名称''' 
     def _old__simplification_add_subtract(self,e:str):
         '''将加法和减法混合的符号化简'''
         c1=e
@@ -27,19 +27,17 @@ class OldTools(Base):
                 c2=False
                 return c1
             
-    def _old__highest_power(self,e:str,ignore=())->int:
-        cache=e.split('^')
+    def _old__highest_power(self, e: str, ignore=()) -> int:
+        cache = e.split('^')
         if len(cache) > 1:
-            for i in range(1,len(cache)):
-                cache[i]=int(cache[i][0])
-            del cache[0]
-            cache=max(cache)
-            return cache
-        elif len(self.unknown(e,ignore)) > 0:
+            cache = [int(x) if x else None for x in cache[1:]]
+            cache = [x for x in cache if x is not None]  # 过滤掉空字符串
+            return max(cache, key=cache.index) if cache else 0
+        elif len(self.unknown(e, ignore)):
             return 1
         else:
             return 0
-            
+        
 
 class stdTools(Base):
     def simplification_add_subtract(self, e: str):
@@ -281,18 +279,24 @@ class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
             return None
         else:
             return eval(e)
-        
-    def highest_power(self, e: str, ignore=()) -> int:
-        cache = e.split('^')
+
+    def highest_power(self,e:str,ignore=())->int:
+        cache=e.split('^')
+        intc=[]
         if len(cache) > 1:
-            cache = [int(x) if x else None for x in cache[1:]]
-            cache = [x for x in cache if x is not None]  # 过滤掉空字符串
-            return max(cache, key=cache.index) if cache else 0
-        elif len(self.unknown(e, ignore)):
+            for i in range(1,len(cache)):
+                #cache[i]=int(cache[i][0])
+                if cache[i] is not None:
+                    intc.append(int(cache[i][0]))
+            #del cache[0]
+            #cache=max(cache)
+            #return cache
+            return max(intc)
+        elif len(self.unknown(e,ignore)) > 0:
             return 1
         else:
             return 0
-        
+               
     def unknown(self,e:str,ignore:tuple):
         '''返回所有未知数'''
         cache=set()
