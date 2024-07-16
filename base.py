@@ -27,6 +27,19 @@ class OldTools(Base):
                 c2=False
                 return c1
             
+    def _old__highest_power(self,e:str,ignore=())->int:
+        cache=e.split('^')
+        if len(cache) > 1:
+            for i in range(1,len(cache)):
+                cache[i]=int(cache[i][0])
+            del cache[0]
+            cache=max(cache)
+            return cache
+        elif len(self.unknown(e,ignore)) > 0:
+            return 1
+        else:
+            return 0
+            
 
 class stdTools(Base):
     def simplification_add_subtract(self, e: str):
@@ -268,16 +281,14 @@ class BaseReturn(EasyTools,ParenthesisTools,stdTools,OldTools):
             return None
         else:
             return eval(e)
-
-    def highest_power(self,e:str,ignore=())->int:
-        cache=e.split('^')
+        
+    def highest_power(self, e: str, ignore=()) -> int:
+        cache = e.split('^')
         if len(cache) > 1:
-            for i in range(1,len(cache)):
-                cache[i]=int(cache[i][0])
-            del cache[0]
-            cache=max(cache)
-            return cache
-        elif len(self.unknown(e,ignore)) > 0:
+            cache = [int(x) if x else None for x in cache[1:]]
+            cache = [x for x in cache if x is not None]  # 过滤掉空字符串
+            return max(cache, key=cache.index) if cache else 0
+        elif len(self.unknown(e, ignore)):
             return 1
         else:
             return 0

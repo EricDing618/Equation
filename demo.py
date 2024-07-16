@@ -56,7 +56,10 @@ if __name__=='__main__':
         else:
             return 'error'
 
-    def many_eqs(eqs:Union[list[str],tuple[str]]=['1+1=2','a=1','a+1=2','a*2+1=3','a*(2+1)=3','a*(2/1^2)=2','(a^2)*(2+1)=3','{a+1*[(3-2)^2]}=2']):
+    def easytest(eqs:Union[str,list[str],tuple[str]]=['1+1=2','a=1','a+1=2','a*2+1=3','a*(2+1)=3','a*(2/1^2)=2','(a^2)*(2+1)=3','{a+1*[(3-2)^2]}=2']):
+        if isinstance(eqs,str):
+            eqs=[eqs]
+
         for eq in eqs:
             print_info[eq] ={
                 'Level':test.level_test(test.replace_test(eq,(),()),()),
@@ -64,11 +67,19 @@ if __name__=='__main__':
                 }
         pprint.pprint(print_info,width=4,indent=2,sort_dicts=False)
 
-    def one_eq(eq=''):
-        print_info[eq] ={
-            'Level':test.level_test(test.replace_test(eq,(),()),()),
-            'Syntax':check_syntax(eq,(),())
-            }
-        pprint.pprint(print_info,width=4,indent=2,sort_dicts=False)
+    def testbook(index=None):
+        a=[]
+        with open('./testbook.txt','r',encoding='utf-8') as f:
+            for i in f.readlines():
+                if i[:-1]=="\n":
+                    a.append(i[:-1])
+                else:
+                    a.append(i)
 
-    one_eq('23=a-2+1')
+            if index is not None:
+                easytest(a[index[0],index[1]])
+            else:
+                easytest(a)
+
+    easytest('23=a-2+1')
+    testbook()
