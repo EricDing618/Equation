@@ -81,5 +81,15 @@ if __name__=='__main__':
             else:
                 easytest(a)
 
-    easytest('23=a-2+1')
-    testbook()
+    def inputtest():
+        run=True
+        while run:
+            eq=input('eq> ')
+            if eq=="quit":
+                run=False
+            else:
+                easytest(eq)
+
+    #easytest('23=a-2+1')
+    #testbook()
+    inputtest()

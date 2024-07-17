@@ -1,5 +1,7 @@
 import re
-import math,decimal
+import math
+import sympy as sp
+#import decimal
 from typing import Union
 from config import *
 from exception import *
@@ -214,7 +216,7 @@ class BaseEasyEquation(BaseEquation):
         super().__init__()
         self.degree=0 #元数
         self.order=0 #次幂数
-        self.result:Union[int,dict,None]=None #结果（一元：int，多元：dict）
+        self.result:Union[dict[str,Union[int,tuple]],None]=None #结果（一元：int，多元：dict）
         self.eq='' #方程
         self.ignore=() #忽略的未知数
         self.value=() #忽略数的值
